@@ -1,0 +1,25 @@
+.comp LongestCommonSubsequence {
+
+	.decl in(word: symbol)
+	.decl in_pairs(word1: symbol, word2: symbol)
+	in_pairs(w1, w2) :- in(w1), in(w2), w1 < w2.
+	.decl words(word: symbol)
+	words(w) :- in(w).
+	words(w1), words(w2) :- in_pairs(w1, w2).
+
+	.decl position(word: symbol, letter: symbol, position: number)
+	position(w, c, p) :- words(w), p = range(0, strlen(w)), c = substr(w, p, 1).
+
+	.decl common(word1: symbol, word2: symbol, start1: number, start2: number, length: number)
+	common(w1, w2, start1, start2, 1) :-
+		words(w1), words(w2), w1 < w2,
+		position(w1, c, start1), position(w2, c, start2).
+	common(w1, w2, start1, start2, length + 1) :-
+		common(w1, w2, start1, start2, length),
+		position(w1, l, start1 + length), position(w2, l, start2 + length).
+	common(w1, w2, _, _, l1) <= common(w1, w2, _, _, l2) :- l1 < l2.
+
+	.decl out(w1: symbol, w2: symbol, start1: number, start2: number, subsequence: symbol, length: number)
+	out(w1, w2, s1, s2, t, length) :- common(w1, w2, s1, s2, length), t = substr(w1, s1, length).
+	
+}
