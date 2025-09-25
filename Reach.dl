@@ -1,0 +1,7 @@
+.comp Reach<T> {
+	.decl in(a: T, b: T)
+	.decl out(a: T, b: T)
+
+	out(a, b) :- in(a, b).
+	out(a, c) :- in(a, b), out(b, c).
+}
