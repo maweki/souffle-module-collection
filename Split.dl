@@ -1,0 +1,18 @@
+.comp Split {
+	.decl delimiter(d: symbol)
+	.decl in(word: symbol)
+
+	.decl split(word: symbol, parent: symbol, source: symbol)
+	split(before, parent, origin), split(after, parent, origin) :-
+		(split(parent, _,origin) ; (in(parent), origin = parent)),
+		delimiter(d), dl = strlen(d), dl > 0,
+		pos = range(0, strlen(parent)-dl),
+		substr(parent, pos, dl) = d,
+		substr(parent, 0, pos) = before,
+		substr(parent, pos + dl, strlen(parent)-pos-dl) = after.
+			
+	
+	.decl out(word: symbol, component: symbol)
+	out(w, w) :- in(w), !split(_, _, w).
+	out(w, o) :- split(w, _, o), !split(_, w, _).
+}
